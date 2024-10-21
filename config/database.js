@@ -2,18 +2,25 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  process.env.POSTGRES_DATABASE,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
   {
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    host: process.env.POSTGRES_HOST,
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+    logging: false,
   }
 );
 
 sequelize
   .authenticate()
-  .then(() => console.log("Connection to MySQL established successfully."))
-  .catch((err) => console.error("Unable to connect to MySQL:", err));
+  .then(() => console.log("Connection to PostgreSQL established successfully."))
+  .catch((err) => console.error("Unable to connect to PostgreSQL:", err));
 
 module.exports = sequelize;
